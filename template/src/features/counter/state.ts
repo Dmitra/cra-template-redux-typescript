@@ -1,24 +1,26 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { CounterState } from './model'
 
-export default {
+const initialState: CounterState = {
   value: 0,
   status: 'idle',
-} as CounterState
+}
 
-export function increment (state: CounterState) {
+export default initialState
+
+function increment (state: CounterState) {
   state.value += 1
 }
 
-export function decrement (state: CounterState) {
+function decrement (state: CounterState) {
   state.value -= 1
 }
 
-export function incrementByAmount (state: CounterState, action: PayloadAction<number>) {
+function incrementByAmount (state: CounterState, action: PayloadAction<number>) {
   state.value += action.payload;
 }
 
-export const extraReducers = {
+const extraReducers = {
   'counter/pending': (state: CounterState) => {
     state.status = 'loading'
   },
@@ -29,4 +31,11 @@ export const extraReducers = {
   'counter/rejected': (state: CounterState) => {
     state.status = 'failed'
   },
+}
+
+export const reducers = {
+  increment,
+  decrement,
+  incrementByAmount,
+  ...extraReducers,
 }

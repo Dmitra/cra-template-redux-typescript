@@ -1,53 +1,26 @@
-import { createSlice, ValidateSliceCaseReducers, SliceCaseReducers } from '@reduxjs/toolkit'
-import { RootState } from './app/store';
+import { createSlice, ValidateSliceCaseReducers, SliceCaseReducers, Slice } from '@reduxjs/toolkit'
 
-// export function createFeature<
-//   Name extends string,
-//   Model,
-//   State,
-//   Reducers extends ValidateSliceCaseReducers<State>,
-//   Selectors,
-//   > (name: Name, model: Model, initialState: State, reducers: Reducers, selectors: Selectors) {
-//   const slice = createSlice({
-//     name,
-//     initialState,
-//     reducers,
-//   })
-//
-//   return {
-//     model,
-//     actions: slice.actions,
-//     reducer: slice.reducer,
-//     select: selectors,
-//   }
-// }
-
-export interface GenericState<T> {
-  data?: T
+interface CreateFeatureParams<Model, Reducers extends SliceCaseReducers<Model>> {
+  name?: string,
+  initialState: Model,
+  reducers: ValidateSliceCaseReducers<Model, Reducers>,
+  selectors: any,
 }
 
-export const createFeature = <
-  T,
-  Model,
-  Reducers extends SliceCaseReducers<GenericState<T>>,
-  Selectors,
->({ name, model, initialState, reducers, selectors }: {
-  name: string
-  model: Model,
-  initialState: GenericState<T>
-  reducers: ValidateSliceCaseReducers<GenericState<T>, Reducers>
-  selectors: Selectors,
-}) => {
-  const slice = createSlice({
+export function createFeature<Model, Reducers extends SliceCaseReducers<Model>>({
+  name = '',
+  initialState,
+  reducers,
+  selectors
+}: CreateFeatureParams<Model, Reducers>): Slice<Model> & { selectors: typeof selectors } {
+  const slice = createSlice<Model, Reducers, string>({
     name,
     initialState,
-    reducers,
+    reducers
   })
 
   return {
-    model,
-    actions: slice.actions,
-    reducer: slice.reducer,
-    select: selectors,
+    ...slice,
+    selectors,
   }
 }
