@@ -1,11 +1,11 @@
-import { createFeature, GenericState } from '../../utils'
-import * as model from './model'
-import initialState, * as reducers from './state'
+import { createFeature } from '../../utils'
+import initialState, { reducers } from './state'
 import * as selectors from './selectors'
+import { CounterState } from './model'
 
-export default createFeature({ name: 'counter',
-  model,
-  initialState: initialState as GenericState<typeof initialState>,
+export default createFeature<CounterState, typeof reducers>({
+  name: 'counter',
+  initialState,
   reducers,
   selectors,
 })
